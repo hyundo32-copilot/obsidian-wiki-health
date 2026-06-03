@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "obsidian-wiki-health"
+version = "0.1.0"
+description = "Local-first health checks for Obsidian-based LLM wikis."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "hyundo32 + roro" }]
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+obsidian-wiki-health = "obsidian_wiki_health.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
