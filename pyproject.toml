@@ -1,19 +1,42 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "obsidian-wiki-health"
 version = "0.1.0"
-description = "Local-first health checks for Obsidian-based LLM wikis."
+description = "Local-first pre-flight checks for Obsidian-based LLM wikis."
 readme = "README.md"
-requires-python = ">=3.9"
-authors = [{ name = "hyundo32 + roro" }]
-license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "hyundo32" }]
+license = "MIT"
+keywords = ["obsidian", "markdown", "knowledge-base", "llm", "wiki", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Documentation",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Typing :: Typed",
+]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/hyundo32/obsidian-wiki-health"
+Repository = "https://github.com/hyundo32/obsidian-wiki-health"
+Issues = "https://github.com/hyundo32/obsidian-wiki-health/issues"
 
 [project.scripts]
 obsidian-wiki-health = "obsidian_wiki_health.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

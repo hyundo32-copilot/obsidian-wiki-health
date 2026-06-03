@@ -1,64 +1,119 @@
 # obsidian-wiki-health
 
-Obsidian 기반 LLM Wiki를 위한 local-first 유지보수 보조 툴킷입니다.
+`obsidian-wiki-health` is a local-first CLI toolkit for maintaining Obsidian-based LLM wikis.
 
-이 프로젝트는 단순 broken link 검사기를 넘어서 다음 문제를 더 빨리 찾는 데 초점을 둡니다.
-- orphan note candidate
-- stale/contradiction 검토 출발점
-- query 전에 먼저 읽어야 할 관련 노트 후보
+Think of it as a **pre-flight checker** before you ask an LLM to reason over your notes. It helps you find what is broken, orphaned, or worth reviewing first — without sending your vault anywhere and without rewriting your notes automatically.
 
 ## Why
-LLM Wiki는 만들수록 가치가 커지지만, 시간이 갈수록 유지보수가 더 어려워집니다.
-이 도구는 "새 노트를 더 많이 만드는 것"보다 "기존 위키를 건강하게 유지하는 것"을 돕기 위해 만들어졌습니다.
 
-## Features (v0.1)
-- scan Obsidian vault
-- parse `wiki/index.md`
-- detect broken internal wikilinks
-- find orphan candidates
-- generate markdown report
-- support research-deep pre-query note suggestions
+LLM wikis grow quickly. Over time, even a useful Obsidian vault can accumulate:
+
+- broken internal wikilinks
+- notes that are no longer connected to the main knowledge map
+- missing context before an LLM query
+- maintenance work that is hard to review consistently
+
+Generic link checkers can tell you whether a link is broken. `obsidian-wiki-health` focuses on the broader health of a markdown knowledge base used with LLMs, NotebookLM-style workflows, and AI agents.
+
+## What it checks
+
+Current v0.1 features:
+
+- scan an Obsidian vault that uses `wiki/index.md` as its knowledge map
+- parse internal Obsidian wikilinks such as `[[topics/topic-a]]`, `[[topics/topic-a.md]]`, `[[topics/topic-a#heading]]`, and `[[topics/topic-a|alias]]`
+- resolve simple basename links such as `[[Topic A]]` when there is exactly one matching markdown file
+- detect broken or unsafe internal wikilinks
+- find orphan note candidates
+- suggest notes to review before asking an LLM a query
+- generate a human-reviewable markdown report
 
 ## Install
+
+From a local checkout (Python 3.10+):
+
 ```bash
-pip install -e .
+git clone https://github.com/hyundo32/obsidian-wiki-health.git
+cd obsidian-wiki-health
+python -m pip install -e .
+```
+
+For development:
+
+```bash
+python -m pip install -e .
+python -m pytest -q
+ruff check .
 ```
 
 ## Quick Start
+
+Print a health report:
+
 ```bash
 obsidian-wiki-health scan /path/to/vault
-obsidian-wiki-health report /path/to/vault --output report.md --query "LLM Wiki 유지보수"
-obsidian-wiki-health research-deep /path/to/vault "LLM Wiki 유지보수"
+```
+
+Write a markdown report:
+
+```bash
+obsidian-wiki-health report /path/to/vault --output report.md --query "LLM Wiki maintenance"
+```
+
+Suggest notes to read before an LLM query:
+
+```bash
+obsidian-wiki-health suggest /path/to/vault "LLM Wiki maintenance"
+```
+
+`research-deep` is kept as a backward-compatible alias for `suggest`.
+
+## Example Output
+
+```md
+# Obsidian Wiki Health Report
+
+## Summary
+- Broken links: 1
+- Orphan candidates: 0
+- Related notes: 3
+- Query: `LLM Wiki maintenance`
+
+## Broken Links
+| Source | Target | Reason |
+| --- | --- | --- |
+| wiki/syntheses/synthesis-a.md | topics/missing-topic | missing |
+
+## Orphan Candidates
+- none
+
+## Suggested Reading Before Query
+- wiki/syntheses/synthesis-a.md
+- wiki/topics/topic-a.md
+- wiki/topics/topic-b.md
 ```
 
 ## Philosophy
-- local-first
-- markdown-first
-- human review before destructive edits
-- assist maintenance, do not silently rewrite knowledge
 
-## Non-goals (v0.1)
-- automatic rewriting of notes
-- vendor-locked LLM workflow
-- heavy GUI plugin
-- background sync or database server
+- **local-first**: runs against local markdown files
+- **markdown-first**: no database or server required
+- **human review before destructive edits**: reports first, no silent rewrites
+- **LLM workflow aware**: helps prepare context before asking an LLM
 
-## Project Layout
-```text
-src/obsidian_wiki_health/
-  cli.py
-  common.py
-  index_parser.py
-  link_checker.py
-  orphan_detector.py
-  research_deep.py
-  report_writer.py
-tests/
-  fixtures/sample_vault/
-```
+## Current Limitations
 
-## Status
-Prototype scaffold with passing tests.
+This is an early prototype. The scope is intentionally small.
+
+- Assumes a vault layout with `wiki/index.md`.
+- Checks markdown files under `wiki/` only.
+- Handles Obsidian-style wikilinks, not every markdown link form.
+- Does not rewrite notes automatically.
+- Does not yet perform semantic stale-note or contradiction detection.
+- Basename links are supported only when they resolve to exactly one markdown file.
+
+## Roadmap
+
+See [`docs/roadmap.md`](docs/roadmap.md).
 
 ## License
+
 MIT
