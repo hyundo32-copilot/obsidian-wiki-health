@@ -32,7 +32,7 @@ Current v0.1 features:
 From a local checkout (Python 3.10+):
 
 ```bash
-git clone https://github.com/hyundo32/obsidian-wiki-health.git
+git clone https://github.com/hyundo32-copilot/obsidian-wiki-health.git
 cd obsidian-wiki-health
 python -m pip install -e .
 ```

@@ -28,9 +28,9 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/hyundo32/obsidian-wiki-health"
-Repository = "https://github.com/hyundo32/obsidian-wiki-health"
-Issues = "https://github.com/hyundo32/obsidian-wiki-health/issues"
+Homepage = "https://github.com/hyundo32-copilot/obsidian-wiki-health"
+Repository = "https://github.com/hyundo32-copilot/obsidian-wiki-health"
+Issues = "https://github.com/hyundo32-copilot/obsidian-wiki-health/issues"
 
 [project.scripts]
 obsidian-wiki-health = "obsidian_wiki_health.cli:main"
